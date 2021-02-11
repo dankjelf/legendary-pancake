@@ -1,0 +1,43 @@
+// A junior developer on your team has been working on a project to highlight important keywords for staff
+// in our UI. Please perform a code review of the following code and provide written review feedback.
+
+function keywordsHTML(text) {
+    const searcher = /(tolerance|dimension|custom|special|additional)/g;
+
+    let matches = [];
+    let match;
+    while ((match = searcher.exec(text)) !== null) {
+        match.lastIndex = searcher.lastIndex;
+        matches.push(match);
+    }
+
+    console.log(matches);
+
+    let results = [];
+    let lastResultIndex = 0;
+
+    matches.forEach((match) => {
+        if (match.index > lastResultIndex) {
+            results.push(text.slice(lastResultIndex, match.index))
+        }
+        results.push(`<strong class="keywordHighlight">${match[0]}</strong>`);
+        lastResultIndex = match.lastIndex;
+    });
+
+    console.log(lastResultIndex);
+    if (lastResultIndex < text.length) {
+      results.push(text.slice(lastResultIndex));
+    }
+
+    return results.join('');
+}
+
+function highlightKeywords(props) {
+    // In part notes, we want to highlight certain keywords for staff. This
+    // function can be used as a pure react component to render a piece
+    // of text with our keywords highlighted.
+
+    const { text } = props;
+
+    return <div dangerouslySetInnerHTML={ () => ({ __html: keywordsHTML(text) }) } />;
+}
